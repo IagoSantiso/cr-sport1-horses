@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 64" fill="none">
+  <!-- Minimalist Monogram CR with subtle equestrian bridle/arc motif -->
+  <g stroke="#0F2D59" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Stylized C with refined arc -->
+    <path d="M 28 18 C 18 18 12 24 12 32 C 12 40 18 46 28 46 C 33 46 37 43 39 40" />
+    <!-- Stylized R interlocking with subtle sporting dynamic -->
+    <path d="M 36 46 V 18 H 47 C 53 18 56 21 56 27 C 56 32 52 35 46 35 M 44 35 L 56 46" />
+    <!-- Fine architectural separator line -->
+    <line x1="72" y1="16" x2="72" y2="48" stroke="#D1CEBF" stroke-width="1.2" />
+  </g>
+  <!-- Brand Wordmark -->
+  <text x="86" y="29" font-family="'Cinzel', 'Playfair Display', serif" font-size="15" font-weight="700" letter-spacing="3.5" fill="#111315">CR SPORT HORSES</text>
+  <text x="86.5" y="44" font-family="'Inter', -apple-system, sans-serif" font-size="8.5" font-weight="500" letter-spacing="2.8" fill="#6A7280">ROI CALVIÑO · ESPAÑA</text>
+</svg>
