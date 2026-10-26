@@ -20,6 +20,7 @@
 	--crs-gutter: clamp(1rem, 4vw, 2.5rem);
 	--crs-space: clamp(4rem, 9vw, 7.5rem);
 	--crs-header-h: 5rem;
+	--crs-top: 0px; /* desplazamiento por la barra de administración de WordPress */
 	--crs-ease: cubic-bezier(.2, .7, .2, 1);
 	--crs-shadow: 0 1px 2px rgba(0, 24, 59, .04), 0 12px 40px -12px rgba(0, 24, 59, .18);
 }
@@ -31,7 +32,10 @@ body { margin: 0; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: 
 body.has-solid-header { padding-top: var(--crs-header-h); }
 img, video, svg, iframe { max-width: 100%; }
 img { height: auto; }
-[id] { scroll-margin-top: calc(var(--crs-header-h) + 1rem); }
+[id] { scroll-margin-top: calc(var(--crs-header-h) + var(--crs-top) + 1rem); }
+body.admin-bar { --crs-top: 32px; }
+@media (max-width: 782px) { body.admin-bar { --crs-top: 46px; } }
+
 a { text-underline-offset: .2em; text-decoration-thickness: 1px; transition: color .2s; }
 :focus-visible { outline: 2px solid var(--crs-blue); outline-offset: 3px; }
 ::selection { background: var(--crs-sky); color: var(--crs-navy); }
@@ -97,7 +101,7 @@ a:hover > .crs-link-arrow::after, .crs-link-arrow:hover::after { width: 2.2rem; 
 
 /* ---------- Cabecera ---------- */
 .crs-header {
-	position: fixed; inset: 0 0 auto; z-index: 100; height: var(--crs-header-h);
+	position: fixed; inset: var(--crs-top) 0 auto; z-index: 100; height: var(--crs-header-h);
 	background: rgba(255, 255, 255, .96); backdrop-filter: saturate(1.4) blur(12px);
 	border-bottom: 1px solid rgba(0, 24, 59, .08);
 	transition: background-color .35s, border-color .35s, color .35s, box-shadow .35s;
@@ -108,6 +112,8 @@ a:hover > .crs-link-arrow::after, .crs-link-arrow:hover::after { width: 2.2rem; 
 .has-hero .crs-header:not(.is-scrolled):not(.is-open) .crs-header__cta { background: #fff; color: var(--crs-navy); }
 .has-hero .crs-header:not(.is-scrolled):not(.is-open) .crs-burger__lines, .has-hero .crs-header:not(.is-scrolled):not(.is-open) .crs-burger__lines::before, .has-hero .crs-header:not(.is-scrolled):not(.is-open) .crs-burger__lines::after { background: #fff; }
 .crs-header.is-scrolled { box-shadow: 0 8px 30px -18px rgba(0, 24, 59, .35); }
+/* Con el menú móvil abierto no puede haber backdrop-filter: haría que el panel fijo se midiera contra la cabecera y no contra la pantalla. */
+.crs-header.is-open { backdrop-filter: none; background: #fff; color: var(--crs-ink); }
 
 .crs-logo, .custom-logo-link { display: inline-flex; align-items: center; gap: .8rem; color: var(--crs-navy); text-decoration: none; flex: none; }
 .custom-logo { max-height: 3rem; width: auto; }
@@ -145,7 +151,7 @@ a:hover > .crs-link-arrow::after, .crs-link-arrow:hover::after { width: 2.2rem; 
 	.crs-header__actions > .crs-lang { display: none; }
 	.crs-header__actions { margin-left: auto; }
 	.crs-nav {
-		position: fixed; inset: var(--crs-header-h) 0 0; background: #fff; padding: 1.5rem var(--crs-gutter) 2.5rem;
+		position: fixed; inset: calc(var(--crs-header-h) + var(--crs-top)) 0 0; background: #fff; padding: 1.5rem var(--crs-gutter) 2.5rem;
 		display: flex; flex-direction: column; overflow-y: auto; opacity: 0; visibility: hidden; transform: translateY(-8px);
 		transition: opacity .3s, transform .3s var(--crs-ease), visibility 0s .3s;
 	}
@@ -191,7 +197,7 @@ a:hover > .crs-link-arrow::after, .crs-link-arrow:hover::after { width: 2.2rem; 
 .crs-center { text-align: center; }
 
 /* Portada */
-.crs-hero { position: relative; display: flex; align-items: flex-end; overflow: hidden; color: #fff; background: var(--crs-navy); isolation: isolate; padding: calc(var(--crs-header-h) + 3rem) var(--crs-gutter) clamp(3rem, 7vw, 6rem) !important; }
+.crs-hero { position: relative; display: flex; align-items: flex-end; overflow: hidden; color: #fff; background: var(--crs-navy); isolation: isolate; padding: calc(var(--crs-header-h) + var(--crs-top) + 3rem) var(--crs-gutter) clamp(3rem, 7vw, 6rem) !important; }
 .crs-hero--home { min-height: min(100svh, 62rem); }
 .crs-hero--page { min-height: min(72svh, 44rem); }
 .crs-hero > .crs-hero__media { position: absolute !important; inset: 0; margin: 0 !important; max-width: none !important; z-index: -1; }
@@ -207,7 +213,7 @@ a:hover > .crs-link-arrow::after, .crs-link-arrow:hover::after { width: 2.2rem; 
 .crs-hero .wp-block-buttons { margin-top: 1rem; }
 .crs-hero .wp-block-button:not(.is-style-crs-light) > .wp-block-button__link { background: #fff; color: var(--crs-navy); }
 .crs-hero .wp-block-button:not(.is-style-crs-light) > .wp-block-button__link:hover { background: var(--crs-sky); }
-@keyframes crs-zoom { from { transform: scale(1.08); } to { transform: scale(1); } }
+@keyframes crs-zoom { from { transform: scale(1.03); } to { transform: scale(1); } }
 
 /* Entradilla de página sin portada (contacto, legales) */
 .crs-page-intro { padding: clamp(3.5rem, 8vw, 6rem) var(--crs-gutter) clamp(2rem, 4vw, 3rem) !important; background: var(--crs-soft); }

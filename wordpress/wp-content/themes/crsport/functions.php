@@ -235,6 +235,8 @@ function crs_language_switcher( string $class = '' ): void {
 	if ( count( (array) $langs ) < 2 ) {
 		return;
 	}
+	// Español primero, siempre.
+	uasort( $langs, fn( $a, $b ) => ( 'es' === $b['slug'] ) <=> ( 'es' === $a['slug'] ) );
 	echo '<ul class="crs-lang ' . esc_attr( $class ) . '" aria-label="' . esc_attr( crs_t( 'lang_switch' ) ) . '">';
 	foreach ( $langs as $lang ) {
 		printf(

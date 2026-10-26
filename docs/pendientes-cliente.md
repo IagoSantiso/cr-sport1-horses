@@ -14,6 +14,8 @@ En la máxima resolución posible: originales del móvil o de la cámara, no cap
 - [ ] **Roi**: retrato profesional y fotos de concurso recientes (ideal: Copa de Naciones 2026 y CSIO Gijón).
 - [ ] **Cada caballo en venta**: 6–10 fotos (de lado en cuadra, en libertad, saltando, detalle de cabeza) + 1–3 vídeos (recorrido, trabajo en plano, salto en libertad).
 
+**Tamaño mínimo:** las fotos de portada (cabecera de cada página) deben tener **al menos 2000 px de ancho**; el resto, 1200 px. Las imágenes provisionales actuales (500–700 px) son las que se ven pixeladas y desaparecerán al sustituirlas. En Medios, las provisionales llevan «PROVISIONAL» en el título.
+
 > Recomendación: una sesión de fotos y dron con un fotógrafo ecuestre para portada, instalaciones y entorno. Es lo que más eleva el resultado.
 
 ## Datos de los caballos en venta
