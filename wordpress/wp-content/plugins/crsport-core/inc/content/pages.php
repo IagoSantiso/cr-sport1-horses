@@ -51,41 +51,57 @@ function crs_seed_page_content( string $key, string $lang, callable $img, callab
 		/* ================================================================ INICIO */
 		case 'inicio':
 			[ $hid, $halt ] = $her( 'hero-home' );
-			$c  = crs_hero(
+			$fei = crs_opt( 'fei_url' );
+			$c   = crs_hero(
 				$hid,
 				$halt,
-				$t( 'Encoro de Cecebre · A Coruña', 'Cecebre Reservoir · A Coruña, Spain' ),
-				$t( 'Formación. Competición. <em>Pasión por el caballo.</em>', 'Training. Competition. <em>A passion for horses.</em>' ),
+				$t( 'CR Sport Horses · Encoro de Cecebre, A Coruña', 'CR Sport Horses · Cecebre, A Coruña, Spain' ),
+				$t( 'Roi Calviño. <em>Salto internacional.</em>', 'Roi Calviño. <em>International show jumping.</em>' ),
 				$t(
-					'Centro ecuestre familiar dirigido por el jinete internacional Roi Calviño. Escuela, entrenamiento, pupilaje y venta de caballos de salto en un entorno natural a 15 minutos de A Coruña.',
-					'A family-run equestrian centre led by international show jumper Roi Calviño. Riding school, training, livery and show jumping horses for sale, in a natural setting just 15 minutes from A Coruña.'
+					'Jinete de Copa de Naciones y fundador de CR Sport Horses. Venta de caballos de salto, entrenamiento de competición, pupilaje y escuela, a 15 minutos de A Coruña.',
+					'Nations Cup rider and founder of CR Sport Horses. Show jumping horses for sale, competition training, livery and a riding school, 15 minutes from A Coruña, Spain.'
 				),
 				array(
 					array( $t( 'Caballos en venta', 'Horses for sale' ), $url( 'caballos' ) ),
-					array( $t( 'Conoce el centro', 'Discover the centre' ), '#centro', 'light' ),
+					array( $t( 'Conoce a Roi', 'Meet Roi' ), $url( 'roi' ), 'light' ),
 				),
 				'home'
 			);
 
+			// Franja de resultados: lo primero que se ve tras la portada.
+			$c .= crs_section(
+				crs_proof(
+					array(
+						array( $t( 'Copa de Naciones', 'Nations Cup' ), $t( '4º en la Final · 2026', '4th at the Final · 2026' ) ),
+						array( 'CSIO 5* Gijón', $t( 'Gran Premio · Las Mestas', 'Grand Prix · Las Mestas' ) ),
+						array( $t( 'Campeón de España', 'Spanish Champion' ), $t( 'Jóvenes Jinetes · 2019', 'Young Riders · 2019' ) ),
+						array( $t( '1º Gran Premio', 'Grand Prix winner' ), 'CSI1* Casas Novas · A Coruña 2023' ),
+					),
+					$fei ? crs_p( '<a href="' . esc_url( $fei ) . '" target="_blank" rel="noopener">' . $t( 'Perfil oficial en la FEI', 'Official FEI profile' ) . '</a>', 'crs-proof__link' ) : ''
+				),
+				'dark',
+				'',
+				'crs-section--proof'
+			);
+
 			$c .= crs_section(
 				crs_split(
-					$im( 'roi-saludo' ),
-					crs_p( $t( 'Sobre nosotros', 'About us' ), 'is-style-crs-eyebrow' )
-					. crs_h( $t( 'Una empresa familiar nacida de la pasión por el caballo', 'A family business born from a passion for horses' ) )
+					$im( 'roi-salto' ),
+					crs_p( $t( 'Dirección deportiva', 'Head rider & coach' ), 'is-style-crs-eyebrow' )
+					. crs_h( $t( 'Un jinete de competición detrás de cada caballo', 'A competition rider behind every horse' ) )
 					. crs_p(
 						$t(
-							'CR Sport Horses nace en marzo de 2022 de la pasión de Roi Calviño por el mundo ecuestre. Lo que empezó como un proyecto familiar es hoy un centro completo donde conviven la escuela, el entrenamiento de competición, el pupilaje y la venta de caballos de salto.',
-							'CR Sport Horses was founded in March 2022 out of Roi Calviño’s passion for the equestrian world. What began as a family project is now a complete centre that brings together a riding school, competition training, livery and the sale of show jumping horses.'
+							'Roi Calviño Rabón compite sin interrupción desde hace más de quince años en los circuitos nacionales 4* y 5* y en concursos internacionales. En marzo de 2022 fundó CR Sport Horses, la empresa familiar desde la que selecciona y prepara caballos de salto, entrena a jinetes de competición y dirige la escuela.',
+							'Roi Calviño Rabón has competed without interruption for more than fifteen years on Spain’s 4* and 5* national circuits and at international shows. In March 2022 he founded CR Sport Horses, the family business through which he selects and produces show jumpers, trains competition riders and runs the riding school.'
 						),
 						'crs-lead'
 					)
-					. crs_p(
-						$t(
-							'Aquí cada caballo y cada jinete reciben el mismo trato: cercanía, método y la exigencia de quien lleva más de quince años compitiendo al máximo nivel.',
-							'Every horse and every rider here gets the same treatment: a personal approach, a clear method and the high standards of someone who has competed at the top level for more than fifteen years.'
+					. crs_buttons(
+						array(
+							array( $t( 'Trayectoria completa', 'Full career' ), $url( 'roi' ) ),
+							array( $t( 'Perfil FEI', 'FEI profile' ), $fei, 'outline' ),
 						)
 					)
-					. crs_buttons( array( array( $t( 'Conoce a Roi Calviño', 'Meet Roi Calviño' ), $url( 'roi' ), 'outline' ) ) )
 				),
 				'',
 				'centro'
@@ -93,43 +109,68 @@ function crs_seed_page_content( string $key, string $lang, callable $img, callab
 
 			$c .= crs_section(
 				crs_section_head(
-					$t( 'Qué hacemos', 'What we do' ),
-					$t( 'Un centro para cada etapa del jinete', 'A centre for every stage of your riding' ),
-					$t( 'Desde la primera clase hasta la pista de concurso, con el mismo equipo y las mismas instalaciones.', 'From your very first lesson to the show ring, with the same team and the same facilities.' )
+					$t( 'Caballos en venta', 'Horses for sale' ),
+					$t( 'Seleccionados y montados por Roi', 'Selected and ridden by Roi' ),
+					$t( 'Cada caballo se monta y se valora a diario antes de salir a la venta. En su ficha: vídeos, origen, nivel, resultados y nuestra valoración técnica.', 'Every horse is ridden and assessed daily before it goes on sale. Each profile includes videos, pedigree, level, results and our technical assessment.' )
 				)
-				. crs_grid(
-					crs_card( $t( 'Escuela de equitación', 'Riding school' ), $t( 'Clases para niños y adultos con nuestros caballos, en la escuela con convenio oficial con el Ayuntamiento.', 'Lessons for children and adults on our own horses, at a riding school officially partnered with the local council.' ), '01', array( $t( 'Ver escuela', 'Riding school' ), $url( 'escuela' ) . '#clases' ) )
-					. crs_card( $t( 'Rutas a caballo', 'Trail rides' ), $t( 'Paseos guiados por los caminos del Encoro de Cecebre, para disfrutar del caballo en plena naturaleza.', 'Guided rides along the paths around the Cecebre reservoir, enjoying horses in the heart of nature.' ), '02', array( $t( 'Ver rutas', 'Trail rides' ), $url( 'escuela' ) . '#rutas' ) )
-					. crs_card( 'CR Sports Academy', $t( 'Tecnificación en salto de obstáculos para niños y jóvenes jinetes. No necesitas caballo: lo ponemos nosotros.', 'Show jumping development for children and young riders. No horse needed: we provide one.' ), '03', array( $t( 'Ver academy', 'The Academy' ), $url( 'escuela' ) . '#academy' ) )
-					. crs_card( $t( 'Entrenamiento', 'Training' ), $t( 'Sesiones con tu propio caballo, por horas o con un plan programado orientado a la competición.', 'Sessions with your own horse, by the hour or with a structured programme aimed at competition.' ), '04', array( $t( 'Ver entrenamiento', 'Training' ), $url( 'entrenamiento' ) ) )
-					. crs_card( $t( 'Pupilaje', 'Livery' ), $t( 'Box propio, alimentación cuidada y acceso a toda la instalación, entrenes por libre o con nosotros.', 'Your own stable, careful feeding and access to the whole facility, whether you train on your own or with us.' ), '05', array( $t( 'Ver pupilaje', 'Livery' ), $url( 'pupilaje' ) ) )
-					. crs_card( $t( 'Venta de caballos', 'Horses for sale' ), $t( 'Caballos de salto seleccionados y preparados por Roi, con ficha completa, vídeos y origen.', 'Show jumping horses selected and produced by Roi, with full profiles, videos and pedigree.' ), '06', array( $t( 'Ver caballos', 'View horses' ), $url( 'caballos' ) ) ),
-					'crs-cards',
-					'16rem',
-					3
-				),
+				. crs_shortcode( '[crsport_caballos limite="3" destacados="si"]' )
+				. crs_buttons( array( array( $t( 'Ver todos los caballos', 'View all horses' ), $url( 'caballos' ) ) ), 'crs-center' ),
 				'soft'
 			);
 
 			$c .= crs_section(
 				crs_section_head(
-					$t( 'Caballos en venta', 'Horses for sale' ),
-					$t( 'Encuentra tu próximo caballo', 'Find your next horse' ),
-					$t( 'Una selección de caballos de salto preparados en nuestras instalaciones, con toda la información para decidir con confianza.', 'A selection of show jumping horses produced at our yard, with all the information you need to decide with confidence.' )
+					$t( 'Servicios', 'Services' ),
+					$t( 'Deporte y escuela, con el mismo método', 'Sport and school, one method' )
 				)
-				. crs_shortcode( '[crsport_caballos limite="3" destacados="si"]' )
-				. crs_buttons( array( array( $t( 'Ver todos los caballos', 'View all horses' ), $url( 'caballos' ) ) ), 'crs-center' )
+				. crs_subhead( $t( 'Deporte', 'Sport' ), $t( 'Para jinetes y propietarios que compiten.', 'For riders and owners who compete.' ) )
+				. crs_grid(
+					crs_card( $t( 'Venta de caballos', 'Horses for sale' ), $t( 'Caballos de salto seleccionados y preparados por Roi, con ficha completa, vídeos y origen.', 'Show jumpers selected and produced by Roi, with full profiles, videos and pedigree.' ), '01', array( $t( 'Ver caballos', 'View horses' ), $url( 'caballos' ) ) )
+					. crs_card( $t( 'Entrenamiento y concursos', 'Training & shows' ), $t( 'Sesiones con tu caballo, plan de competición y asistencia en concurso, dentro y fuera de Galicia.', 'Sessions with your horse, a competition plan and show support, in Galicia and beyond.' ), '02', array( $t( 'Ver entrenamiento', 'Training' ), $url( 'entrenamiento' ) ) )
+					. crs_card( $t( 'Pupilaje', 'Livery' ), $t( 'Box propio, alimentación cuidada y acceso a toda la instalación, solo o con entrenamiento.', 'Your own stable, careful feeding and access to the whole facility, with or without training.' ), '03', array( $t( 'Ver pupilaje', 'Livery' ), $url( 'pupilaje' ) ) ),
+					'crs-cards',
+					'16rem',
+					3
+				)
+				. crs_subhead( $t( 'Escuela', 'Riding school' ), $t( 'Para quien empieza o quiere dar el salto a la competición.', 'For beginners and for those taking the step into competition.' ) )
+				. crs_grid(
+					crs_card( 'CR Sports Academy', $t( 'Tecnificación en salto para niños y jóvenes jinetes. El caballo lo ponemos nosotros.', 'Show jumping development for children and young riders. We provide the horse.' ), '', array( $t( 'Ver academy', 'The Academy' ), $url( 'escuela' ) . '#academy' ) )
+					. crs_card( $t( 'Escuela de equitación', 'Riding lessons' ), $t( 'Clases para niños y adultos con nuestros caballos, con convenio oficial con el Ayuntamiento.', 'Lessons for children and adults on our horses, officially partnered with the local council.' ), '', array( $t( 'Ver escuela', 'Riding school' ), $url( 'escuela' ) . '#clases' ) )
+					. crs_card( $t( 'Rutas por Cecebre', 'Rides around Cecebre' ), $t( 'Rutas guiadas a caballo por los caminos del Encoro de Cecebre.', 'Guided rides along the paths around the Cecebre reservoir.' ), '', array( $t( 'Ver rutas', 'Trail rides' ), $url( 'escuela' ) . '#rutas' ) ),
+					'crs-cards crs-cards--steps',
+					'16rem',
+					3
+				)
 			);
 
 			$c .= crs_section(
+				crs_section_head(
+					$t( 'Instalaciones', 'Facilities' ),
+					$t( 'Pensadas para el caballo de deporte', 'Designed for the sport horse' )
+				)
+				. crs_grid(
+					crs_stat( '70 × 35 m', $t( 'Pista de arena de sílice con geotextil', 'Silica sand arena with geotextile base' ) )
+					. crs_stat( '26', $t( 'Cuadras adaptadas de 3 × 3 m', 'Purpose-built 3 × 3 m stables' ) )
+					. crs_stat( '6', $t( 'Plazas en el caminador', 'Horse walker places' ) )
+					. crs_stat( '1.000 m²', $t( 'De paddocks de gran formato', 'Of large paddocks' ) ),
+					'crs-stats',
+					'11rem',
+					4
+				)
+				. crs_buttons( array( array( $t( 'Ver instalaciones', 'View facilities' ), $url( 'instalaciones' ), 'outline' ) ) ),
+				'soft'
+			);
+
+			[ $cid, $calt ] = $her( 'cecebre' );
+			$c .= crs_section(
 				crs_split(
-					$im( 'cecebre' ),
+					crs_image( $cid, $calt, 'large', '', crs_seed_image_credit( 'cecebre', $lang ) ),
 					crs_p( $t( 'Dónde estamos', 'Where we are' ), 'is-style-crs-eyebrow' )
-					. crs_h( $t( 'En el Encoro de Cecebre, a un paso de todo', 'At the Cecebre reservoir, close to everything' ) )
+					. crs_h( $t( 'Encoro de Cecebre, A Coruña', 'Cecebre reservoir, A Coruña' ) )
 					. crs_p(
 						$t(
-							'Nuestra actividad se desarrolla junto al Encoro de Cecebre, un espacio natural de especial belleza muy cerca de Betanzos. Un lugar tranquilo para el caballo y muy bien comunicado para quien viene de fuera, con dos aeropuertos a menos de una hora.',
-							'We are based beside the Cecebre reservoir, a natural area of outstanding beauty close to the historic town of Betanzos. A peaceful place for horses and easy to reach for visitors from abroad, with two airports less than an hour away.'
+							'El centro está junto al Encoro de Cecebre, un espacio natural protegido muy cerca de Betanzos: tranquilidad para el caballo y buenas comunicaciones para quien viene de fuera, con dos aeropuertos a menos de una hora.',
+							'The centre sits beside the Cecebre reservoir, a protected natural area close to the historic town of Betanzos: peace and quiet for the horses and easy access for visitors from abroad, with two airports less than an hour away.'
 						)
 					)
 					. crs_grid(
@@ -147,52 +188,13 @@ function crs_seed_page_content( string $key, string $lang, callable $img, callab
 				'dark'
 			);
 
-			$c .= crs_section(
-				crs_section_head(
-					$t( 'Instalaciones', 'Facilities' ),
-					$t( 'Pensadas para el caballo de deporte', 'Designed for the sport horse' )
-				)
-				. crs_grid(
-					crs_stat( '70 × 35 m', $t( 'Pista de arena de sílice con geotextil', 'Silica sand arena with geotextile base' ) )
-					. crs_stat( '26', $t( 'Cuadras adaptadas de 3 × 3 m', 'Purpose-built 3 × 3 m stables' ) )
-					. crs_stat( '6', $t( 'Plazas en el caminador', 'Horse walker places' ) )
-					. crs_stat( '1.000 m²', $t( 'De paddocks de gran formato', 'Of large paddocks' ) ),
-					'crs-stats',
-					'11rem',
-					4
-				)
-				. crs_buttons( array( array( $t( 'Ver instalaciones', 'View facilities' ), $url( 'instalaciones' ), 'outline' ) ) )
-			);
-
-			$c .= crs_section(
-				crs_split(
-					$im( 'roi-salto' ),
-					crs_p( $t( 'Dirección deportiva', 'Head rider & coach' ), 'is-style-crs-eyebrow' )
-					. crs_h( 'Roi Calviño Rabón' )
-					. crs_p(
-						$t(
-							'Más de quince años de competición ininterrumpida en circuitos nacionales 4* y 5* y en concursos internacionales CSI. Campeón de España en ponis, ganador del Gran Premio de A Coruña y cuarto en la Final de la Copa de Naciones 2026.',
-							'More than fifteen years of uninterrupted competition on Spain’s 4* and 5* national circuits and at international CSI shows. Spanish pony champion, winner of the A Coruña Grand Prix and fourth at the 2026 Nations Cup Final.'
-						),
-						'crs-lead'
-					)
-					. crs_buttons( array( array( $t( 'Ver trayectoria', 'Full career' ), $url( 'roi' ) ) ) )
-				),
-				'soft'
-			);
-
-			$c .= crs_section(
-				crs_section_head( 'Instagram', $t( 'El día a día del centro', 'Life at the yard' ), $t( 'Entrenamientos, concursos y nuevos caballos, contados en nuestro Instagram.', 'Training, shows and new horses, shared on our Instagram.' ), 'crs-center' )
-				. crs_shortcode( '[crsport_instagram]' )
-			);
-
 			$c .= $consult( 'otro' );
 
 			return array(
 				'content' => $c,
 				'excerpt' => $t(
-					'Centro ecuestre en el Encoro de Cecebre (A Coruña) dirigido por Roi Calviño: escuela de equitación, rutas a caballo, entrenamiento de salto, pupilaje y venta de caballos.',
-					'Equestrian centre at the Cecebre reservoir (A Coruña, Spain) led by Roi Calviño: riding school, trail rides, show jumping training, livery and horses for sale.'
+					'CR Sport Horses, el centro de Roi Calviño en el Encoro de Cecebre (A Coruña): venta de caballos de salto, entrenamiento de competición, pupilaje y escuela de equitación.',
+					'CR Sport Horses, Roi Calviño’s yard at the Cecebre reservoir (A Coruña, Spain): show jumping horses for sale, competition training, livery and riding school.'
 				),
 			);
 
@@ -607,27 +609,31 @@ function crs_seed_page_content( string $key, string $lang, callable $img, callab
 		/* ================================================================ ROI */
 		case 'roi':
 			[ $hid, $halt ] = $her( 'hero-roi' );
-			$c  = crs_hero(
+			$fei = crs_opt( 'fei_url' );
+			$c   = crs_hero(
 				$hid,
 				$halt,
-				$t( 'Dirección deportiva', 'Head rider & coach' ),
+				$t( 'Jinete internacional · España', 'International rider · Spain' ),
 				'Roi Calviño Rabón',
 				$t(
-					'Jinete gallego con más de quince años de competición ininterrumpida en circuitos nacionales 4* y 5* y en concursos internacionales CSI. Fundador de CR Sport Horses.',
-					'Galician show jumper with more than fifteen years of uninterrupted competition on Spain’s 4* and 5* national circuits and at international CSI shows. Founder of CR Sport Horses.'
-				)
+					'Más de quince años de competición ininterrumpida en circuitos nacionales 4* y 5* y en concursos internacionales CSI. Jinete de Copa de Naciones y fundador de CR Sport Horses.',
+					'More than fifteen years of uninterrupted competition on Spain’s 4* and 5* national circuits and at international CSI shows. Nations Cup rider and founder of CR Sport Horses.'
+				),
+				$fei ? array( array( $t( 'Perfil oficial FEI', 'Official FEI profile' ), $fei, 'light' ) ) : array()
 			);
 
 			$c .= crs_section(
-				crs_grid(
-					crs_stat( '+15', $t( 'Años compitiendo en 4*, 5* y CSI', 'Years competing at 4*, 5* and CSI level' ) )
-					. crs_stat( '7', $t( 'Copas de Naciones como joven jinete', 'Nations Cups as a young rider' ) )
-					. crs_stat( '1º', $t( 'Gran Premio de A Coruña', 'A Coruña Grand Prix' ) )
-					. crs_stat( '4º', $t( 'Final de la Copa de Naciones 2026', '2026 Nations Cup Final' ) ),
-					'crs-stats',
-					'11rem',
-					4
-				)
+				crs_proof(
+					array(
+						array( $t( 'Copa de Naciones', 'Nations Cup' ), $t( '4º en la Final · 2026', '4th at the Final · 2026' ) ),
+						array( 'CSIO 5* Gijón', $t( 'Gran Premio · Las Mestas', 'Grand Prix · Las Mestas' ) ),
+						array( $t( 'Campeón de España', 'Spanish Champion' ), $t( 'Jóvenes Jinetes · 2019, con Enjoy', 'Young Riders · 2019, on Enjoy' ) ),
+						array( $t( '7 Copas de Naciones', '7 Nations Cups' ), $t( 'Como joven jinete', 'As a young rider' ) ),
+					)
+				),
+				'dark',
+				'',
+				'crs-section--proof'
 			);
 
 			$timeline = function ( string $stage, string $title, array $items ) {
@@ -652,9 +658,9 @@ function crs_seed_page_content( string $key, string $lang, callable $img, callab
 						$t( 'Categorías de menores', 'Youth categories' ),
 						$t( 'Joven jinete', 'Young rider' ),
 						array(
-							$t( 'Campeonato de España: 1º, 2º y 4º puesto.', 'Spanish Championships: 1st, 2nd and 4th place.' ),
+							$t( '<strong>Campeón de España de Jóvenes Jinetes 2019</strong> con Enjoy, además de un 2º y un 4º puesto en el Campeonato de España.', '<strong>Spanish Young Riders Champion 2019</strong> on Enjoy, plus a 2nd and a 4th place at the Spanish Championships.' ),
 							$t( '8º por equipos en el Campeonato de Europa.', '8th in the team competition at the European Championships.' ),
-							$t( 'Participación en 7 Copas de Naciones.', 'Competed in 7 Nations Cups.' ),
+							$t( '7 Copas de Naciones.', '7 Nations Cups.' ),
 							$t( 'Ha disputado y liderado el Campeonato de Galicia en múltiples ocasiones.', 'Has contested and led the Galician Championship many times.' ),
 						)
 					)
@@ -662,22 +668,32 @@ function crs_seed_page_content( string $key, string $lang, callable $img, callab
 						$t( 'Categoría absoluta', 'Senior level' ),
 						$t( 'Adulto', 'Senior' ),
 						array(
-							$t( '10º en su primer Campeonato de España de adultos.', '10th at his first senior Spanish Championship.' ),
+							$t( '10º en su primer Campeonato de España absoluto.', '10th at his first senior Spanish Championship.' ),
 							$t( 'Copa de Naciones y Gran Premio clasificatorio para los Juegos Olímpicos de París.', 'Nations Cup and a qualifying Grand Prix for the Paris Olympic Games.' ),
-							$t( 'Ganador del Gran Premio de A Coruña, con otros puestos de honor (2º, 3º, 4º) en distintas ediciones.', 'Winner of the A Coruña Grand Prix, with further top placings (2nd, 3rd, 4th) in other editions.' ),
+							$t( '<strong>Ganador del Gran Premio CSI1* de Casas Novas</strong> (A Coruña, 2023) con Enjoy CR, tras quedar 2º, 3º y 4º en otras ediciones.', '<strong>Winner of the CSI1* Casas Novas Grand Prix</strong> (A Coruña, 2023) on Enjoy CR, after 2nd, 3rd and 4th places in previous editions.' ),
+							$t( 'Ganador del Gran Premio Cidade de Ferrol 2019 con Dollar do Diabolo.', 'Winner of the 2019 Cidade de Ferrol Grand Prix on Dollar do Diabolo.' ),
 						)
 					)
 					. $timeline(
 						'2026',
 						$t( 'Temporada 2026', '2026 season' ),
 						array(
-							$t( '4º en la Final de la Copa de Naciones.', '4th at the Nations Cup Final.' ),
+							$t( '<strong>4º en la Final de la Copa de Naciones.</strong>', '<strong>4th at the Nations Cup Final.</strong>' ),
 							$t( 'Gran Premio del CSIO 5* de Gijón (Las Mestas).', 'Grand Prix at the CSIO 5* Gijón (Las Mestas).' ),
 						)
 					),
 					array( 'class' => 'crs-timeline' )
 				),
 				'soft'
+			);
+
+			$c .= crs_section(
+				crs_section_head(
+					$t( 'En pista', 'In the ring' ),
+					$t( 'Caballos de competición', 'Competition horses' ),
+					$t( 'Los caballos con los que Roi compite esta temporada en concursos nacionales e internacionales.', 'The horses Roi is competing with this season at national and international shows.' )
+				)
+				. crs_shortcode( '[crsport_caballos estado="competicion"]' )
 			);
 
 			$c .= crs_section(
@@ -693,13 +709,14 @@ function crs_seed_page_content( string $key, string $lang, callable $img, callab
 						)
 					),
 					true
-				)
+				),
+				'soft'
 			);
 
 			$c .= $consult( 'entrenamiento' );
 			return array(
 				'content' => $c,
-				'excerpt' => $t( 'Roi Calviño Rabón, jinete de salto gallego: más de 15 años en circuitos 4*, 5* y CSI, campeón de España en ponis, ganador del GP de A Coruña y 4º en la Final de la Copa de Naciones 2026.', 'Roi Calviño Rabón, Galician show jumper: 15+ years at 4*, 5* and CSI level, Spanish pony champion, A Coruña Grand Prix winner and 4th at the 2026 Nations Cup Final.' ),
+				'excerpt' => $t( 'Roi Calviño Rabón, jinete internacional de salto: Campeón de España de Jóvenes Jinetes 2019, 4º en la Final de la Copa de Naciones 2026 y Gran Premio del CSIO 5* de Gijón.', 'Roi Calviño Rabón, international show jumper: 2019 Spanish Young Riders Champion, 4th at the 2026 Nations Cup Final and Grand Prix rider at CSIO 5* Gijón.' ),
 			);
 
 		/* ================================================================ CONTACTO */

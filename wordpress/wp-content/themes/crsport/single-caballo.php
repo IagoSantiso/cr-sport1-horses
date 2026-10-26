@@ -39,12 +39,27 @@ while ( have_posts() ) :
 			);
 		}
 	}
-	$total = count( $slides );
+	// Si hay vídeo, va primero: es lo que más mira un comprador.
+	foreach ( $slides as $i => $slide ) {
+		if ( 'image' !== $slide['type'] ) {
+			if ( $i > 0 ) {
+				array_unshift( $slides, $slide );
+				unset( $slides[ $i + 1 ] );
+				$slides = array_values( $slides );
+			}
+			break;
+		}
+	}
+	$total   = count( $slides );
+	$on_sale = in_array( $h['estado'], array( 'disponible', 'reservado' ), true );
 	?>
 	<article <?php post_class( 'crs-horse' ); ?>>
 
 		<header class="crs-horse__head">
-			<?php crs_breadcrumbs( array( array( crs_t( 'horses_for_sale' ), crs_page_url( 'caballos' ) ), array( $h['nombre'], '' ) ) ); ?>
+			<?php
+			$parent = 'competicion' === $h['estado'] ? array( 'Roi Calviño', crs_page_url( 'roi' ) ) : array( crs_t( 'horses_for_sale' ), crs_page_url( 'caballos' ) );
+			crs_breadcrumbs( array( $parent, array( $h['nombre'], '' ) ) );
+			?>
 			<div class="crs-horse__title">
 				<div>
 					<p class="crs-status crs-status--<?php echo esc_attr( $h['estado'] ); ?>"><span aria-hidden="true"></span><?php echo esc_html( $h['estado_txt'] ); ?></p>
@@ -130,24 +145,42 @@ while ( have_posts() ) :
 				</div>
 			<?php endif; ?>
 
+			<?php
+			$rows = array_filter(
+				array(
+					'horse_age'    => $h['edad'] ? $h['edad_txt'] . ( $h['nacimiento'] ? ' (' . $h['nacimiento'] . ')' : '' ) : '',
+					'horse_sex'    => $h['sexo_txt'],
+					'horse_breed'  => $h['raza'],
+					'horse_coat'   => $h['capa'],
+					'horse_height' => $h['alzada_txt'],
+				)
+			);
+			// Sin datos ni acciones (p. ej. un caballo de competición recién creado) no se muestra la caja.
+			if ( $rows || $on_sale || $h['horsetelex'] ) :
+				?>
 			<aside class="crs-horse__aside">
+				<?php if ( $rows ) : ?>
 				<p class="crs-horse__aside-title"><?php crs_e( 'horse_key_data' ); ?></p>
 				<dl class="crs-specs-list">
 					<?php
-					$rows = array(
-						'horse_age'    => $h['edad'] ? $h['edad_txt'] . ( $h['nacimiento'] ? ' (' . $h['nacimiento'] . ')' : '' ) : '',
-						'horse_sex'    => $h['sexo_txt'],
-						'horse_breed'  => $h['raza'],
-						'horse_coat'   => $h['capa'],
-						'horse_height' => $h['alzada_txt'],
-					);
-					foreach ( array_filter( $rows ) as $label => $value ) :
+					foreach ( $rows as $label => $value ) :
 						?>
 						<div><dt><?php crs_e( $label ); ?></dt><dd><?php echo esc_html( $value ); ?></dd></div>
 					<?php endforeach; ?>
 				</dl>
+				<?php endif; ?>
+				<?php if ( $on_sale && ( $h['rx'] || $h['prueba'] ) ) : ?>
+					<ul class="crs-horse__badges">
+						<?php if ( $h['rx'] ) : ?>
+							<li><?php crs_e( 'horse_rx' ); ?></li>
+						<?php endif; ?>
+						<?php if ( $h['prueba'] ) : ?>
+							<li><?php crs_e( 'horse_trial' ); ?></li>
+						<?php endif; ?>
+					</ul>
+				<?php endif; ?>
 				<div class="crs-horse__actions">
-					<?php if ( 'vendido' !== $h['estado'] ) : ?>
+					<?php if ( $on_sale ) : ?>
 						<a class="crs-btn crs-btn--primary" href="#consulta"><?php crs_e( 'horse_ask' ); ?></a>
 						<a class="crs-btn crs-btn--ghost" href="<?php echo esc_url( crs_whatsapp_url( $wa_txt ) ); ?>" target="_blank" rel="noopener">
 							<?php echo crs_icon( 'whatsapp' ); // phpcs:ignore WordPress.Security.EscapeOutput ?> WhatsApp
@@ -159,8 +192,11 @@ while ( have_posts() ) :
 						</a>
 					<?php endif; ?>
 				</div>
+				<?php if ( $on_sale ) : ?>
 				<p class="crs-horse__phone"><?php crs_e( 'form_or_call' ); ?> <a href="<?php echo esc_attr( crs_tel_href() ); ?>"><?php echo esc_html( crs_opt( 'telefono' ) ); ?></a></p>
+				<?php endif; ?>
 			</aside>
+			<?php endif; ?>
 		</div>
 
 		<section class="crs-horse__body">
@@ -182,6 +218,16 @@ while ( have_posts() ) :
 						<p class="crs-fact__value"><?php echo esc_html( $value ); ?></p>
 					</div>
 				<?php endforeach; ?>
+				<?php if ( $h['resultados'] ) : ?>
+					<div class="crs-fact crs-fact--results">
+						<p class="crs-fact__label"><?php crs_e( 'horse_results' ); ?></p>
+						<ul>
+							<?php foreach ( $h['resultados'] as $result ) : ?>
+								<li><?php echo esc_html( $result ); ?></li>
+							<?php endforeach; ?>
+						</ul>
+					</div>
+				<?php endif; ?>
 			</div>
 		</section>
 
@@ -204,7 +250,7 @@ while ( have_posts() ) :
 			</section>
 		<?php endif; ?>
 
-		<?php if ( 'vendido' !== $h['estado'] ) : ?>
+		<?php if ( $on_sale ) : ?>
 			<section class="crs-horse__consult" id="consulta">
 				<div class="crs-consult">
 					<div class="crs-consult__intro">

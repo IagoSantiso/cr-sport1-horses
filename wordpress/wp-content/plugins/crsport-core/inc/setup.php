@@ -22,7 +22,7 @@ function crs_seed_images(): array {
 	return array(
 		'hero-home'          => array( 'roi-salto-pista.jpg', 'Roi Calviño saltando en concurso', 'Roi Calviño jumping at a show' ),
 		'roi-saludo'         => array( 'roi-saludo.jpg', 'Roi Calviño saludando en pista cubierta', 'Roi Calviño saluting in an indoor arena' ),
-		'cecebre'            => array( 'demo-paddocks.jpg', 'Paddocks junto al Encoro de Cecebre', 'Paddocks by the Cecebre reservoir' ),
+		'cecebre'            => array( 'cecebre-embalse-paco-suarez.jpg', 'Atardecer en el Encoro de Cecebre', 'Sunset over the Cecebre reservoir' ),
 		'roi-salto'          => array( 'roi-salto-vertical.jpg', 'Roi Calviño en pleno salto', 'Roi Calviño mid-jump' ),
 		'hero-caballos'      => array( 'roi-salto-negro.jpg', 'Caballo de salto en concurso', 'Show jumper at a competition' ),
 		'hero-escuela'       => array( 'escuela-ruta-bosque.jpg', 'Alumnos de la escuela en una ruta a caballo', 'Riding school pupils on a trail ride' ),
@@ -47,6 +47,33 @@ function crs_seed_images(): array {
 		'caballo-2b'         => array( 'demo-caballo-2b.jpg', 'Retrato de la yegua', 'Portrait of the mare' ),
 		'caballo-3'          => array( 'demo-caballo-3.jpg', 'Caballo saltando en concurso', 'Horse jumping at a show' ),
 		'caballo-3b'         => array( 'demo-caballo-3b.jpg', 'Caballo en recorrido', 'Horse on course' ),
+	);
+}
+
+/**
+ * Fotos con licencia libre que exigen atribución: clave => [autor, URL de la ficha, licencia, URL de la licencia].
+ */
+function crs_seed_image_credits(): array {
+	return array(
+		'cecebre' => array( 'Paco Suarez', 'https://commons.wikimedia.org/wiki/File:Embalse_Cecebre_Puesta_de_sol.jpg', 'CC BY-SA 4.0', 'https://creativecommons.org/licenses/by-sa/4.0/' ),
+	);
+}
+
+/**
+ * Pie de foto con la atribución, en el idioma indicado ('' si la foto no la necesita).
+ */
+function crs_seed_image_credit( string $key, string $lang = 'es' ): string {
+	$c = crs_seed_image_credits()[ $key ] ?? null;
+	if ( ! $c ) {
+		return '';
+	}
+	return sprintf(
+		'%s <a href="%s" target="_blank" rel="noopener">%s</a> · <a href="%s" target="_blank" rel="noopener">%s</a>',
+		'en' === $lang ? 'Photo:' : 'Foto:',
+		esc_url( $c[1] ),
+		esc_html( $c[0] ),
+		esc_url( $c[3] ),
+		esc_html( $c[2] )
 	);
 }
 
@@ -83,6 +110,15 @@ function crs_seed_image_id( string $key ): int {
 	require_once ABSPATH . 'wp-admin/includes/media.php';
 	require_once ABSPATH . 'wp-admin/includes/image.php';
 
+	// Las fotos con licencia libre no son provisionales: llevan su autor en el título y el pie.
+	$credit     = '';
+	foreach ( crs_seed_images() as $k => $d ) {
+		if ( $d[0] === $file && isset( crs_seed_image_credits()[ $k ] ) ) {
+			$credit = crs_seed_image_credits()[ $k ];
+		}
+	}
+	$title = $credit ? $def[1] . ' · ' . $credit[0] . ' (' . $credit[2] . ')' : 'PROVISIONAL · ' . $def[1];
+
 	$tmp = wp_tempnam( $file );
 	copy( CRS_DIR . 'assets/seed/' . $file, $tmp );
 	$id = media_handle_sideload(
@@ -91,7 +127,7 @@ function crs_seed_image_id( string $key ): int {
 			'tmp_name' => $tmp,
 		),
 		0,
-		'PROVISIONAL · ' . $def[1]
+		$title
 	);
 	if ( is_wp_error( $id ) ) {
 		wp_delete_file( $tmp );
@@ -99,6 +135,14 @@ function crs_seed_image_id( string $key ): int {
 	}
 	update_post_meta( $id, '_crs_seed', $file );
 	update_post_meta( $id, '_wp_attachment_image_alt', $def[1] );
+	if ( $credit ) {
+		wp_update_post(
+			array(
+				'ID'           => $id,
+				'post_excerpt' => crs_seed_image_credit( (string) $key ),
+			)
+		);
+	}
 	return $cache[ $file ] = (int) $id;
 }
 
@@ -257,6 +301,7 @@ function crs_run_setup( bool $rewrite_texts = false ): array {
 
 	// 5) Caballos de ejemplo.
 	crs_setup_horses( $langs, $bilingual, $log );
+	crs_setup_competition_horses( $langs, $bilingual, $log );
 
 	// 6) Polylang: sincronizar foto destacada, orden y campos personalizados entre traducciones.
 	if ( $bilingual && isset( PLL()->options ) ) {
@@ -382,7 +427,7 @@ function crs_setup_horses( array $langs, bool $bilingual, array &$log ): void {
 			'name_en' => "Cornet d'Or (example)",
 			'cat'    => 'competicion',
 			'images' => array( 'caballo-1', 'caballo-1b', 'caballo-1c' ),
-			'meta'   => array( 'nacimiento' => 2017, 'sexo' => 'castrado', 'alzada' => 1.68, 'origen' => 'Cornet Obolensky × Diamant de Semilly', 'estado' => 'disponible', 'destacado' => 1, 'p_salto' => 9, 'p_capacidad' => 8, 'p_galope' => 8, 'p_caracter' => 9, 'p_manejo' => 8 ),
+			'meta'   => array( 'nacimiento' => 2017, 'sexo' => 'castrado', 'alzada' => 1.68, 'origen' => 'Cornet Obolensky × Diamant de Semilly', 'estado' => 'disponible', 'destacado' => 1, 'rx' => 1, 'prueba' => 1, 'resultados' => "1º · 1,35 m · CSN3* (ejemplo)\nDoble cero · 1,40 m · CSI2* (ejemplo)", 'p_salto' => 9, 'p_capacidad' => 8, 'p_galope' => 8, 'p_caracter' => 9, 'p_manejo' => 8 ),
 			'es'     => array( 'raza' => 'Warmblood Belga (BWP)', 'capa' => 'Castaña', 'nivel' => 'Salta 1,35 m con regularidad', 'potencial' => 'Gran Premio 1,45–1,50 m', 'resumen' => 'Técnica limpia y un galope fácil de regular. Listo para competir a 1,35 m.', 'texto' => 'Caballo de ejemplo para ver cómo queda una ficha. Castrado de gran regularidad, con mucha técnica de manos y un galope amplio y fácil de regular. Muy noble en la cuadra y en el trabajo diario. Ideal para un jinete que quiera consolidarse en pruebas de 1,35 m y seguir subiendo.' ),
 			'en'     => array( 'raza' => 'Belgian Warmblood (BWP)', 'capa' => 'Bay', 'nivel' => 'Jumping 1.35 m consistently', 'potencial' => '1.45–1.50 m Grand Prix', 'resumen' => 'Clean technique and an easily adjustable canter. Ready to compete at 1.35 m.', 'texto' => 'Example horse showing how a profile looks. A very consistent gelding with great front-leg technique and a big, adjustable canter. Kind in the stable and in daily work. Ideal for a rider looking to establish themselves at 1.35 m and move up.' ),
 		),
@@ -439,6 +484,41 @@ function crs_setup_horses( array $langs, bool $bilingual, array &$log ): void {
 		$log[] = '✔ Caballo de ejemplo: ' . $horse['name'];
 	}
 	update_option( 'crs_seed_horses', 1 );
+}
+
+/**
+ * Caballos con los que Roi compite en 2026 según la FEI (no están en venta). Sin fotos todavía:
+ * se muestran como tarjetas de texto hasta que se les añada una foto principal.
+ */
+function crs_setup_competition_horses( array $langs, bool $bilingual, array &$log ): void {
+	if ( get_option( 'crs_seed_competition' ) ) {
+		return;
+	}
+	foreach ( array( 'Morris', 'Intouch Four Flags', 'Allablanka Z' ) as $order => $name ) {
+		$ids = array();
+		foreach ( $langs as $lang ) {
+			$id = wp_insert_post(
+				array(
+					'post_type'    => 'caballo',
+					'post_status'  => 'publish',
+					'post_title'   => $name,
+					'post_name'    => sanitize_title( $name ) . ( 'en' === $lang ? '-en' : '' ),
+					'post_content' => crs_p( 'en' === $lang ? 'One of the horses Roi Calviño is competing with at national and international shows in the 2026 season.' : 'Uno de los caballos con los que Roi Calviño compite en concursos nacionales e internacionales en la temporada 2026.' ),
+					'menu_order'   => $order,
+				)
+			);
+			if ( $bilingual ) {
+				pll_set_post_language( $id, $lang );
+			}
+			update_post_meta( $id, '_crs_estado', 'competicion' );
+			$ids[ $lang ] = $id;
+		}
+		if ( $bilingual ) {
+			pll_save_post_translations( $ids );
+		}
+		$log[] = '✔ Caballo de competición: ' . $name;
+	}
+	update_option( 'crs_seed_competition', 1 );
 }
 
 /* ---------------------------------------------------------------------------

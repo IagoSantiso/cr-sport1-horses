@@ -13,6 +13,13 @@ function crs_score_criteria(): array {
 }
 
 /**
+ * Estados posibles de un caballo. «competicion» = caballo de Roi que no está en venta.
+ */
+function crs_horse_states(): array {
+	return array( 'disponible', 'reservado', 'vendido', 'competicion' );
+}
+
+/**
  * Campos de la ficha: clave => [tipo, se sincroniza entre idiomas].
  * Los campos sincronizados se copian automáticamente a la traducción (Polylang).
  */
@@ -31,6 +38,9 @@ function crs_horse_fields(): array {
 		'galeria'    => array( 'string', true ),
 		'videos'     => array( 'string', true ),
 		'destacado'  => array( 'boolean', true ),
+		'rx'         => array( 'boolean', true ),
+		'prueba'     => array( 'boolean', true ),
+		'resultados' => array( 'string', true ),
 	);
 	foreach ( crs_score_criteria() as $criterion ) {
 		$fields[ 'p_' . $criterion ] = array( 'integer', true );
@@ -192,6 +202,9 @@ function crs_horse( $post = null ): array {
 		'media'      => $scores ? round( array_sum( $scores ) / count( $scores ), 1 ) : 0,
 		'categorias' => wp_get_post_terms( $post->ID, 'tipo_caballo' ),
 		'resumen'    => has_excerpt( $post ) ? get_the_excerpt( $post ) : '',
+		'rx'         => (bool) $m( 'rx' ),
+		'prueba'     => (bool) $m( 'prueba' ),
+		'resultados' => array_values( array_filter( array_map( 'trim', preg_split( '/\R/', (string) $m( 'resultados' ) ) ) ) ),
 	);
 }
 
@@ -278,11 +291,11 @@ function crs_render_horse_metabox( WP_Post $post ): void {
 			</label>
 			<label>Estado <span class="crs-sync">⇄</span>
 				<select name="crs[estado]">
-					<?php foreach ( array( 'disponible', 'reservado', 'vendido' ) as $estado ) : ?>
+					<?php foreach ( crs_horse_states() as $estado ) : ?>
 						<option value="<?php echo esc_attr( $estado ); ?>" <?php selected( $v( 'estado' ) ?: 'disponible', $estado ); ?>><?php echo esc_html( crs_t( 'status_' . $estado, 'es' ) ); ?></option>
 					<?php endforeach; ?>
 				</select>
-				<small>Los vendidos salen del listado pero su ficha sigue accesible.</small>
+				<small>Vendidos: salen del listado y su ficha sigue accesible. Competición: caballos de Roi que no están en venta (salen en su página).</small>
 			</label>
 		</div>
 
@@ -328,6 +341,20 @@ function crs_render_horse_metabox( WP_Post $post ): void {
 		<label class="crs-mb__full">
 			<textarea name="crs[videos]" rows="3" placeholder="https://www.youtube.com/watch?v=…&#10;https://vimeo.com/…&#10;https://www.instagram.com/reel/…"><?php echo esc_textarea( $v( 'videos' ) ); ?></textarea>
 			<small>Un enlace por línea: YouTube, Vimeo o una publicación/reel de Instagram. Se cargan solo cuando el visitante pulsa «reproducir» (sin cookies previas).</small>
+		</label>
+
+		<h3>Para el comprador <span class="crs-sync">⇄</span></h3>
+		<label class="crs-mb__check">
+			<input type="checkbox" name="crs[rx]" value="1" <?php checked( (bool) $v( 'rx' ) ); ?>>
+			Radiografías disponibles
+		</label>
+		<label class="crs-mb__check">
+			<input type="checkbox" name="crs[prueba]" value="1" <?php checked( (bool) $v( 'prueba' ) ); ?>>
+			Disponible para prueba en nuestras instalaciones
+		</label>
+		<label class="crs-mb__full" style="margin-top:1em">Resultados destacados
+			<textarea name="crs[resultados]" rows="3" placeholder="1º · 1,35 m · CSN3* Casas Novas 2026&#10;Doble cero · 1,40 m · CSI2* Esposende 2026"><?php echo esc_textarea( $v( 'resultados' ) ); ?></textarea>
+			<small>Uno por línea. Se muestran en la ficha.</small>
 		</label>
 
 		<label class="crs-mb__check">
@@ -381,13 +408,18 @@ add_action(
 					$value = implode( "\n", array_filter( array_map( 'esc_url_raw', array_map( 'trim', preg_split( '/\R/', $raw ) ) ) ) );
 					break;
 				case 'estado':
-					$value = in_array( $raw, array( 'disponible', 'reservado', 'vendido' ), true ) ? $raw : 'disponible';
+					$value = in_array( $raw, crs_horse_states(), true ) ? $raw : 'disponible';
 					break;
 				case 'sexo':
 					$value = in_array( $raw, array( 'yegua', 'macho', 'castrado' ), true ) ? $raw : '';
 					break;
 				case 'destacado':
+				case 'rx':
+				case 'prueba':
 					$value = $raw ? 1 : 0;
+					break;
+				case 'resultados':
+					$value = sanitize_textarea_field( $raw );
 					break;
 				default:
 					$value = sanitize_text_field( $raw );
@@ -439,7 +471,7 @@ add_action(
 add_action(
 	'admin_head',
 	function () {
-		echo '<style>.column-crs_foto{width:64px}.column-crs_foto img{border-radius:4px;object-fit:cover}.crs-status{padding:2px 8px;border-radius:10px;font-size:12px;background:#e7f5ea;color:#1e6b32}.crs-status--reservado{background:#fff4dc;color:#8a5a00}.crs-status--vendido{background:#eee;color:#555}</style>';
+		echo '<style>.column-crs_foto{width:64px}.column-crs_foto img{border-radius:4px;object-fit:cover}.crs-status{padding:2px 8px;border-radius:10px;font-size:12px;background:#e7f5ea;color:#1e6b32}.crs-status--reservado{background:#fff4dc;color:#8a5a00}.crs-status--vendido{background:#eee;color:#555}.crs-status--competicion{background:#e6edf8;color:#0f2d59}</style>';
 	}
 );
 

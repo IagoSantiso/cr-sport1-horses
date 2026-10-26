@@ -52,6 +52,7 @@ add_action(
 				'@type'    => 'Person',
 				'name'     => 'Roi Calviño Rabón',
 				'jobTitle' => crs_t( 'schema_founder_role' ),
+				'sameAs'   => array_values( array_filter( array( crs_opt( 'fei_url' ) ) ) ),
 			),
 			'foundingDate' => '2022-03',
 			'sameAs'      => array_values( $same_as ),

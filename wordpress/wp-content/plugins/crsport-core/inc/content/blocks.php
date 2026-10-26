@@ -122,7 +122,7 @@ function crs_buttons( array $buttons, string $class = '' ): string {
 	return crs_b( 'buttons', crs_with_class( array(), $class ), '<div' . crs_class_attr( array( 'wp-block-buttons', $class ) ) . ">\n{$inner}</div>" );
 }
 
-function crs_image( int $id, string $alt, string $size = 'large', string $class = '' ): string {
+function crs_image( int $id, string $alt, string $size = 'large', string $class = '', string $caption = '' ): string {
 	if ( ! $id ) {
 		return '';
 	}
@@ -138,7 +138,8 @@ function crs_image( int $id, string $alt, string $size = 'large', string $class 
 	return crs_b(
 		'image',
 		$attrs,
-		'<figure' . crs_class_attr( array( 'wp-block-image', 'size-' . $size, $class ) ) . '><img src="' . esc_url( $src ) . '" alt="' . esc_attr( $alt ) . '" class="wp-image-' . $id . '"/></figure>'
+		'<figure' . crs_class_attr( array( 'wp-block-image', 'size-' . $size, $class ) ) . '><img src="' . esc_url( $src ) . '" alt="' . esc_attr( $alt ) . '" class="wp-image-' . $id . '"/>'
+		. ( $caption ? '<figcaption class="wp-element-caption">' . $caption . '</figcaption>' : '' ) . '</figure>'
 	);
 }
 
@@ -217,6 +218,24 @@ function crs_card( string $title, string $text, string $label = '', array $link 
  */
 function crs_stat( string $value, string $label ): string {
 	return crs_group( crs_p( $value, 'crs-stat__value' ) . crs_p( $label, 'crs-stat__label' ), array( 'class' => 'crs-stat' ) );
+}
+
+/**
+ * Franja de pruebas de nivel (resultados destacados). $items = [ [cifra/título, detalle], … ].
+ */
+function crs_proof( array $items, string $link = '' ): string {
+	$inner = '';
+	foreach ( $items as $item ) {
+		$inner .= crs_stat( $item[0], $item[1] );
+	}
+	return crs_grid( $inner, 'crs-stats crs-proof', '12rem', count( $items ) ) . $link;
+}
+
+/**
+ * Subtítulo de grupo dentro de una sección (p. ej. «Deporte» / «Escuela»).
+ */
+function crs_subhead( string $title, string $text = '' ): string {
+	return crs_group( crs_h( $title, 3 ) . ( $text ? crs_p( $text ) : '' ), array( 'class' => 'crs-subhead' ) );
 }
 
 /**

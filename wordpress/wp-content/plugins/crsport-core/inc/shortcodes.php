@@ -3,6 +3,7 @@
  * Piezas dinámicas que se insertan en las páginas con un bloque «Código corto»:
  *
  * [crsport_caballos limite="3" filtros="si" destacados="si"]  Listado de caballos en venta.
+ * [crsport_caballos estado="competicion"]                   Caballos de competición de Roi (no están en venta).
  * [crsport_consulta interes="pupilaje"]                        Bloque «Consultar»: texto + teléfono + WhatsApp + formulario.
  * [crsport_formulario interes="…"]                             Solo el formulario (inc/form.php).
  * [crsport_contacto]                                           Datos de contacto.
@@ -26,21 +27,26 @@ function crs_horse_card( $post, string $heading = 'h3' ): string {
 
 	ob_start();
 	?>
-	<article class="crs-horse-card is-<?php echo esc_attr( $h['estado'] ); ?>" data-cats="<?php echo esc_attr( implode( ' ', $cats ) ); ?>">
+	<article class="crs-horse-card is-<?php echo esc_attr( $h['estado'] ); ?><?php echo $image ? '' : ' has-no-image'; ?>" data-cats="<?php echo esc_attr( implode( ' ', $cats ) ); ?>">
+		<?php if ( $image || 'competicion' !== $h['estado'] ) : ?>
 		<a class="crs-horse-card__media" href="<?php echo esc_url( $h['url'] ); ?>" tabindex="-1" aria-hidden="true">
 			<?php
 			echo $image
 				? wp_get_attachment_image( $image, 'crs-card', false, array( 'loading' => 'lazy', 'sizes' => '(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw' ) )
 				: '<span class="crs-horse-card__noimg"></span>';
 			?>
-			<?php if ( 'disponible' !== $h['estado'] ) : ?>
+			<?php if ( ! in_array( $h['estado'], array( 'disponible', 'competicion' ), true ) ) : ?>
 				<span class="crs-badge crs-badge--<?php echo esc_attr( $h['estado'] ); ?>"><?php echo esc_html( $h['estado_txt'] ); ?></span>
 			<?php endif; ?>
 			<?php if ( $h['nivel'] ) : ?>
 				<span class="crs-horse-card__level"><?php echo esc_html( $h['nivel'] ); ?></span>
 			<?php endif; ?>
 		</a>
+		<?php endif; ?>
 		<div class="crs-horse-card__body">
+			<?php if ( 'competicion' === $h['estado'] ) : ?>
+				<p class="crs-horse-card__kicker"><?php echo esc_html( $h['estado_txt'] ); ?></p>
+			<?php endif; ?>
 			<<?php echo tag_escape( $heading ); ?> class="crs-horse-card__name"><a href="<?php echo esc_url( $h['url'] ); ?>"><?php echo esc_html( $h['nombre'] ); ?></a></<?php echo tag_escape( $heading ); ?>>
 			<?php if ( $meta ) : ?>
 				<p class="crs-meta-line"><?php echo esc_html( implode( ' · ', $meta ) ); ?></p>
@@ -48,7 +54,7 @@ function crs_horse_card( $post, string $heading = 'h3' ): string {
 			<?php if ( $h['resumen'] ) : ?>
 				<p class="crs-horse-card__excerpt"><?php echo esc_html( $h['resumen'] ); ?></p>
 			<?php endif; ?>
-			<span class="crs-link-arrow" aria-hidden="true"><?php crs_e( 'view_horse' ); ?></span>
+			<span class="crs-link-arrow" aria-hidden="true"><?php crs_e( 'competicion' === $h['estado'] ? 'view_profile' : 'view_horse' ); ?></span>
 		</div>
 	</article>
 	<?php
@@ -63,12 +69,28 @@ add_shortcode(
 				'limite'     => -1,
 				'filtros'    => 'no',
 				'destacados' => 'no',
+				'estado'     => '',
 			),
 			$atts
 		);
 
 		$args = array( 'posts_per_page' => (int) $atts['limite'] );
-		if ( 'si' === $atts['destacados'] ) {
+		if ( 'competicion' === $atts['estado'] ) {
+			// Caballos de competición de Roi: no están en venta y no muestran aviso si no hay ninguno.
+			$query = crs_query_horses(
+				$args + array(
+					'meta_query' => array( // phpcs:ignore WordPress.DB.SlowDBQuery
+						array(
+							'key'   => '_crs_estado',
+							'value' => 'competicion',
+						),
+					),
+				)
+			);
+			if ( ! $query->have_posts() ) {
+				return '';
+			}
+		} elseif ( 'si' === $atts['destacados'] ) {
 			$featured = crs_query_horses(
 				$args + array(
 					'meta_key'   => '_crs_destacado', // phpcs:ignore WordPress.DB.SlowDBQuery

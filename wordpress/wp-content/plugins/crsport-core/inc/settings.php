@@ -20,6 +20,7 @@ function crs_settings_fields(): array {
 		'horario'        => array( 'Horario de atención', '', 'Opcional. Ej.: Lunes a sábado · 9:00–20:00', 'contacto' ),
 		'instagram'      => array( 'Usuario de Instagram (sin @)', 'crsport_horses', '', 'redes' ),
 		'facebook'       => array( 'URL de Facebook', '', 'Opcional.', 'redes' ),
+		'fei_url'        => array( 'Perfil FEI de Roi (URL)', 'https://www.fei.org/athlete/10102937/CALVINO-RABON-Roi', 'Enlace oficial a resultados y caballos en la FEI.', 'redes' ),
 		'razon_social'   => array( 'Titular / razón social', '', 'Para el aviso legal y la política de privacidad.', 'legal' ),
 		'nif'            => array( 'NIF / CIF', '', '', 'legal' ),
 		'domicilio'      => array( 'Domicilio fiscal', '', '', 'legal' ),
@@ -104,7 +105,7 @@ add_action(
 						$value = isset( $input[ $key ] ) ? wp_unslash( $input[ $key ] ) : '';
 						if ( in_array( $key, array( 'email_publico', 'email_destino', 'email_legal' ), true ) ) {
 							$value = sanitize_email( $value );
-						} elseif ( 'facebook' === $key ) {
+						} elseif ( in_array( $key, array( 'facebook', 'fei_url' ), true ) ) {
 							$value = esc_url_raw( $value );
 						} elseif ( 'instagram' === $key ) {
 							$value = ltrim( sanitize_text_field( $value ), '@' );

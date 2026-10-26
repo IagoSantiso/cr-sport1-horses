@@ -28,6 +28,13 @@ Para cada uno:
 - descripción;
 - valoración CR (1–10) en técnica de salto, capacidad, galope, carácter y facilidad de monta. ⚠ Validar estos 5 criterios.
 
+## Para reforzar la imagen de élite
+
+- [ ] **Vídeo para la portada**: 10–20 s de salto a cámara lenta, horizontal, sin sonido, en buena calidad (lo ideal, de un concurso internacional). La web ya está preparada para mostrarlo a pantalla completa.
+- [ ] **Caballos de competición**: hemos creado Morris, Intouch Four Flags y Allablanka Z (los que figuran con Roi en la FEI en 2026). Faltan foto, raza, edad y si son propiedad de Roi o de clientes (¿se pueden nombrar?). ¿Falta alguno, o hay que quitar alguno?
+- [ ] **2–4 opiniones** de propietarios o alumnos (nombre, una frase, permiso para publicarla).
+- [ ] **Patrocinadores o colaboradores** con logo, si los hay.
+
 ## Datos de la empresa
 
 - [ ] Titular / razón social, NIF/CIF y domicilio fiscal (para aviso legal y privacidad).
@@ -39,7 +46,8 @@ Para cada uno:
 ## Textos a confirmar ⚠
 
 - [ ] **Distancias**: Coruña 15 min, Ferrol y Santiago 40, Lugo 45 (de las notas). Hemos puesto **aeropuerto de A Coruña ≈ 20 min** y **aeropuerto de Santiago ≈ 40 min**: ¿correcto?
-- [ ] **Palmarés de joven jinete**: las notas dicen «4, 2, 1 en campeonato de España». Lo hemos redactado como «Campeonato de España: 1º, 2º y 4º puesto». ¿Es así, y en qué categorías/años?
+- [ ] **Resultados verificados en fuentes públicas** que ya están en la web: Campeón de España de Jóvenes Jinetes 2019 con Enjoy (RFHE), Gran Premio CSI1* de Casas Novas 2023 con Enjoy CR y Gran Premio Cidade de Ferrol 2019 con Dollar do Diabolo (prensa), perfil FEI 10102937. ¿El «GP de Coruña» de las notas es el de Casas Novas 2023?
+- [ ] **Palmarés de joven jinete**: las notas dicen «4, 2, 1 en campeonato de España». El 1º es el Campeonato de España de Jóvenes Jinetes 2019; lo hemos redactado como «además de un 2º y un 4º puesto en el Campeonato de España». ¿En qué categorías y años fueron esos dos?
 - [ ] **«Copa de Naciones y Gran Premio clasificatorio para los JJOO de París»** y **«4º en la Final de la Copa de Naciones 2026»**: ¿individual o por equipos?
 - [ ] **Escuela municipal**: nombre exacto del Ayuntamiento con el que hay convenio (¿Abegondo? ¿Cambre?), por si queremos citarlo.
 - [ ] **CR Sports Academy**: ¿la imparte Roi directamente? Hemos puesto «con el método y la experiencia de Roi Calviño».
