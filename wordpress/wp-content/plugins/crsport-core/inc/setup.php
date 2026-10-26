@@ -282,6 +282,9 @@ function crs_run_setup( bool $rewrite_texts = false ): array {
 
 	flush_rewrite_rules();
 	update_option( 'crs_setup_version', CRS_VERSION );
+	if ( 'crsport' !== get_stylesheet() ) {
+		$log[] = '⚠ El tema «CR Sport Horses» no está activo: actívalo en Apariencia › Temas para ver el diseño.';
+	}
 	$log[] = '✔ Listo. Revisa «CR Sport › Ajustes» para completar email y datos legales.';
 	return $log;
 }
@@ -298,9 +301,11 @@ function crs_setup_menus( array $ids, array $langs, bool $bilingual, array &$log
 		'legal'   => 'Pie · Legal',
 	);
 
-	$locations   = get_theme_mod( 'nav_menu_locations', array() );
+	// Se asignan al tema «crsport» aunque todavía no esté activo (si no, los menús quedarían sin ubicación).
+	$theme       = 'crsport';
+	$mods        = get_option( 'theme_mods_' . $theme, array() );
+	$locations   = (array) ( $mods['nav_menu_locations'] ?? array() );
 	$pll_menus   = $bilingual ? (array) PLL()->options['nav_menus'] : array();
-	$theme       = get_stylesheet();
 
 	foreach ( $menus as $location => $keys ) {
 		foreach ( $langs as $lang ) {
@@ -333,7 +338,8 @@ function crs_setup_menus( array $ids, array $langs, bool $bilingual, array &$log
 			}
 		}
 	}
-	set_theme_mod( 'nav_menu_locations', $locations );
+	$mods['nav_menu_locations'] = $locations;
+	update_option( 'theme_mods_' . $theme, $mods );
 	if ( $bilingual ) {
 		PLL()->options['nav_menus'] = $pll_menus;
 		if ( method_exists( PLL()->options, 'save' ) ) {

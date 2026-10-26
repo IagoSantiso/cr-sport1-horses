@@ -26,6 +26,16 @@ require_once CRS_DIR . 'inc/seo.php';
 require_once CRS_DIR . 'inc/redirects.php';
 require_once CRS_DIR . 'inc/setup.php';
 
+/* Aviso si el plugin está activo pero el tema no. */
+add_action(
+	'admin_notices',
+	function () {
+		if ( 'crsport' !== get_stylesheet() && current_user_can( 'switch_themes' ) ) {
+			echo '<div class="notice notice-warning"><p><strong>CR Sport Horses:</strong> falta activar el tema «CR Sport Horses» en <a href="' . esc_url( admin_url( 'themes.php' ) ) . '">Apariencia › Temas</a>; mientras tanto la web se ve con el tema anterior.</p></div>';
+		}
+	}
+);
+
 register_activation_hook(
 	__FILE__,
 	function () {
