@@ -266,6 +266,12 @@ while ( have_posts() ) :
 								<?php echo crs_icon( 'whatsapp' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
 								<span><small>WhatsApp</small><?php crs_e( 'contact_whatsapp_cta' ); ?></span>
 							</a>
+							<?php if ( crs_opt( 'email_publico' ) ) : ?>
+								<a class="crs-direct" href="mailto:<?php echo esc_attr( crs_opt( 'email_publico' ) ); ?>?subject=<?php echo rawurlencode( $h['nombre'] ); ?>">
+									<?php echo crs_icon( 'mail' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+									<span><small>Email</small><?php echo esc_html( crs_opt( 'email_publico' ) ); ?></span>
+								</a>
+							<?php endif; ?>
 						</div>
 					</div>
 					<div class="crs-consult__form">

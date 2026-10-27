@@ -13,8 +13,8 @@ function crs_settings_fields(): array {
 	return array(
 		'telefono'       => array( 'Teléfono público', '673 22 55 60', 'Tal y como se mostrará en la web.', 'contacto' ),
 		'whatsapp'       => array( 'WhatsApp (formato internacional, solo números)', '34673225560', 'Ejemplo: 34673225560.', 'contacto' ),
-		'email_publico'  => array( 'Email público', '', 'Se muestra en la web. Déjalo vacío para no mostrar ninguno.', 'contacto' ),
-		'email_destino'  => array( 'Email que recibe las consultas', '', 'Si está vacío se usa el email de administración del sitio.', 'contacto' ),
+		'email_publico'  => array( 'Email público', 'info@crsporthorses.es', 'Se muestra en la cabecera de contacto, el pie y los bloques «Consultar».', 'contacto' ),
+		'email_destino'  => array( 'Email que recibe las consultas', 'info@crsporthorses.es', 'Aquí llegan los avisos del formulario. Si lo dejas vacío se usa el valor por defecto.', 'contacto' ),
 		'direccion'      => array( 'Dirección o ubicación', 'Encoro de Cecebre · A Coruña', 'Texto que se muestra en el pie y en contacto.', 'contacto' ),
 		'maps_query'     => array( 'Búsqueda para Google Maps', 'Encoro de Cecebre, A Coruña', 'Dirección exacta o coordenadas (ej.: 43.28,-8.30).', 'contacto' ),
 		'horario'        => array( 'Horario de atención', '', 'Opcional. Ej.: Lunes a sábado · 9:00–20:00', 'contacto' ),

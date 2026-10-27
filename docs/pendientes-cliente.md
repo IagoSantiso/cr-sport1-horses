@@ -38,7 +38,7 @@ Para cada uno:
 ## Datos de la empresa
 
 - [ ] Titular / razón social, NIF/CIF y domicilio fiscal (para aviso legal y privacidad).
-- [ ] Email público de contacto y email donde recibir las consultas. La web actual muestra `cristinaorto@live.com` e `info@ayeservicios.es`: ¿cuál queda, o creamos `info@crsporthorses.es`?
+- [ ] Email público de contacto y email donde recibir las consultas. Decidido: **info@crsporthorses.es** (ya configurado por defecto en la web). Falta crear el buzón en DonDominio y conectarlo con WP Mail SMTP.
 - [ ] Dirección exacta o ubicación en Google Maps del centro.
 - [ ] Horario de atención (opcional).
 - [ ] Logo en vector (SVG/AI/PDF), si existe. Si no, usamos el monograma CR o diseñamos uno.
