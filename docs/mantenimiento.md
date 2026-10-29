@@ -27,6 +27,13 @@
 
 El cambio se aplica también a la versión en inglés.
 
+## Actualizar el tema o el plugin
+
+1. En el repositorio, ejecuta `./bin/build-zips.sh` (genera los ZIP en `dist/`).
+2. Sube el ZIP en *Plugins → Añadir → Subir plugin* o *Apariencia → Temas → Añadir → Subir tema* y acepta «Reemplazar».
+3. Esto **no toca el contenido** de las páginas ni los caballos. Si el cambio afecta a los textos de las páginas, edítalos a mano.
+4. **No marques «Reescribir también los textos»** en *CR Sport → Contenido inicial* salvo que quieras restaurar las páginas a su versión original: sobrescribe lo que hayas editado (por ejemplo, el vídeo de portada).
+
 ## Editar textos de las páginas
 
 - **Páginas →** abre la página (ES o EN) y edita con el editor de bloques.
