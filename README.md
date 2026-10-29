@@ -21,6 +21,10 @@ Web de [crsporthorses.es](https://crsporthorses.es/): centro ecuestre de **Roi C
 
 El `vercel.json` de la raíz pone `noindex`, así que la demo de Vercel no se indexa en Google.
 
+## La demo está marcada como demo
+
+Cada página de la demo muestra una etiqueta fija **«Demo de diseño · No es la web final · datos de ejemplo»** (esquina inferior izquierda) y su título de pestaña empieza por **«DEMO ·»**. Está definida en `assets/js/demo.js` y `assets/css/demo.css`.
+
 ## Datos de la demo estática: son de ejemplo
 
 Los textos, teléfonos y emails de la demo estática **no son reales**. Por ejemplo: `+34 600 123 456`, `info@crsportshorses.com` (con «s» de más), «Galicia / Madrid», «Doma Clásica», «FEI & RFHE Registered» o los caballos «Cornet d'Or» y similares. Los datos reales están en el WordPress (ver abajo) y en `docs/pendientes-cliente.md`.
@@ -61,4 +65,6 @@ Tema y plugin a medida, bilingües ES/EN con Polylang:
 
 ## Ramas
 
-El trabajo se desarrolla en `claude/compassionate-cray-bu0d3y`. Todavía no está fusionado con `main`.
+- **Rama principal del repositorio:** `claude/optimistic-dirac-kccogm`. GitHub no tiene una rama llamada `main`; esa es la rama por defecto y la que se muestra al entrar en el repositorio.
+- **Rama de trabajo:** `claude/compassionate-cray-bu0d3y`, ya fusionada en la principal.
+- Si Vercel está conectado a este repositorio, cada cambio en la rama principal vuelve a publicar la demo. `wordpress/`, `docs/`, `bin/` y `dist/` están excluidos del despliegue (`.vercelignore`).

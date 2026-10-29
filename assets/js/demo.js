@@ -2,6 +2,16 @@
   'use strict';
   var page = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
 
+  /* Marca de demo: esta web es solo una demostración del diseño, no la web final */
+  document.title = 'DEMO · ' + document.title.replace(/^DEMO · /, '');
+  (function () {
+    var tag = document.createElement('div');
+    tag.id = 'demo-badge';
+    tag.setAttribute('role', 'note');
+    tag.innerHTML = '<strong>Demo de diseño</strong><span>No es la web final · datos de ejemplo</span>';
+    document.body.appendChild(tag);
+  })();
+
   /* Aviso breve para enlaces que aún no existen en la demo */
   var toast;
   function showToast(msg) {
